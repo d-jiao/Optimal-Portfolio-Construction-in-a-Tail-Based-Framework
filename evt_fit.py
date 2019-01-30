@@ -26,10 +26,10 @@ def pareto(q, loc = 0, scale = 1, shape = 0, lbda = 0):
 eng = matlab.engine.start_matlab()
 output = pd.DataFrame()
 
-upper_quantile = [0.9721086, 0.9750837, 0.9750837, 0.9888434]
-lower_quantile = [0.01487542, 0.03756043, 0.01375976, 0.01190033]
-upper_threshold = [0.03, -0.15, -0.02, 0.01]
-lower_threshold = [-0.04, -0.19, -0.08, -0.043]
+upper_quantile = [0.9758274, 0.9877278, 0.9873559, 0.9739680]
+lower_quantile = [0.02082559, 0.02008181, 0.02268501, 0.03161026]
+upper_threshold = [0.03, 0.025, 0.03, 0.02]
+lower_threshold = [-0.035, -0.025, -0.03, -0.02]
 
 for i in range(len(indices)):
     dta = matlab.double(list(res[indices_front[i]]))

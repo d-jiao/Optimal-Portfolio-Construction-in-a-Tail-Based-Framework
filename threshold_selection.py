@@ -4,8 +4,8 @@ from scipy.stats import chi2
 
 # indices_front = ['CSI 300', 'S&P 500', 'Nikkei 225', 'FTSE 100']
 indices = ['csi', 'spx', 'nky', 'ukx']
-uppper_threshold = [0.03, -0.15, -0.02, 0.01]
-lower_threshold = [-0.04, -0.19, -0.08, -0.043]
+upper_threshold = [0.03, 0.025, 0.03, 0.02]
+lower_threshold = [-0.035, -0.025, -0.03, -0.02]
 
 # plt.rcParams['axes.prop_cycle'].by_key()['color']
 for i in range(len(indices)):
@@ -17,12 +17,12 @@ for i in range(len(indices)):
     ax[0][0].plot(mrl_di['a.x'], mrl_di['mrl'], color = '#1f77b4', linewidth = 0.75)
     ax[0][0].plot(mrl_di['a.x'], mrl_di['lower'], color = '#ff7f0e', linewidth = 0.75, linestyle = ':')
     ax[0][0].plot(mrl_di['a.x'], mrl_di['upper'], color = '#ff7f0e', linewidth = 0.75, linestyle = ':')
-    ax[0][0].axvline(uppper_threshold[i], linewidth = 0.75, color = 'b', linestyle = '--')
+    ax[0][0].axvline(upper_threshold[i], linewidth = 0.75, color = 'b', linestyle = '--')
     ax[0][0].set_ylabel('Mean Excess')
 
     ax[0][1].plot(mrl_di['b.thresh'], mrl_di['b.DI'], linewidth = 0.75)
     ax[0][1].set_ylabel('Dispersion Index')
-    ax[0][1].axvline(uppper_threshold[i], linewidth=0.75, color = 'b', linestyle = '--')
+    ax[0][1].axvline(upper_threshold[i], linewidth=0.75, color = 'b', linestyle = '--')
     M = len(mrl_di)
     conf = 0.95
     conf_sup = chi2.ppf(1 - (1 - conf) / 2, M - 1)/(M - 1)
@@ -38,13 +38,13 @@ for i in range(len(indices)):
     x = [(obs_inf + i * dobs) for i in range(nt)]
     ax[1][0].scatter(x, tc['mscale'], facecolors='none', edgecolors='#1f77b4')
     ax[1][0].vlines(x, tc['lower'], tc['upper'], linewidth = 0.75, color = '#ff7f0e')
-    ax[1][0].axvline(uppper_threshold[i], linewidth=0.75, color = 'b', linestyle = '--')
+    ax[1][0].axvline(upper_threshold[i], linewidth=0.75, color = 'b', linestyle = '--')
     ax[1][0].set_ylabel('Modified Scale')
     ax[1][0].set_xlabel('Threshold')
 
     ax[1][1].scatter(x, tc['shape'], facecolors='none', edgecolors='#1f77b4')
     ax[1][1].vlines(x, tc['lower.1'], tc['upper.1'], linewidth = 0.75, color = '#ff7f0e')
-    ax[1][1].axvline(uppper_threshold[i], linewidth=0.75, color = 'b', linestyle = '--')
+    ax[1][1].axvline(upper_threshold[i], linewidth=0.75, color = 'b', linestyle = '--')
     ax[1][1].set_ylabel('Shape')
     ax[1][1].set_xlabel('Threshold')
 

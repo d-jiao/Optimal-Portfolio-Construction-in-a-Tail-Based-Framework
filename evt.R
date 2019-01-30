@@ -24,7 +24,7 @@ for(i in 1 : length(indices)){
   write.csv(tc, file = paste('.\\data\\', indices[i], '_tc.csv', sep = ''))
 }
 
-upper_threshold <- c(0.03, -0.15, -0.02, 0.01)
+upper_threshold <- c(0.03, 0.025, 0.03, 0.02)
 ur <- c()
 
 for(i in 1 : length(upper_threshold)){
@@ -52,7 +52,7 @@ for(i in 1 : length(indices)){
   write.csv(tc, file = paste('.\\data\\', indices[i], '_tc_left.csv', sep = ''))
 }
 
-lower_threshold <- c(-0.04, -0.19, -0.09, -0.05)
+lower_threshold <- c(-0.035, -0.025, -0.03, -0.02)
 ul <- c()
 
 for(i in 1 : length(lower_threshold)){

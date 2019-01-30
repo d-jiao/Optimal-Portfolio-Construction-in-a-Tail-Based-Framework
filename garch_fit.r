@@ -16,7 +16,7 @@ res <- NULL
 vol <- NULL
 
 for(i in 1 : length(indices)){
-  dta <- data.frame(rtd[,1])
+  dta <- data.frame(rtd[,i])
   row.names(dta) <- time
   colnames(dta) <- indices[i]
   
