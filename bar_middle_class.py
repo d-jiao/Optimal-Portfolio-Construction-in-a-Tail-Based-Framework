@@ -21,7 +21,7 @@ std_men = (2, 3, 4, 1, 2)
 means_women = (25, 32, 34, 20, 25)
 std_women = (3, 5, 2, 3, 3)
 
-fig, ax = plt.subplots(figsize = (10, 5))
+fig, ax = plt.subplots(figsize = (8, 4))
 
 index = np.arange(n_groups)
 bar_width = 0.2

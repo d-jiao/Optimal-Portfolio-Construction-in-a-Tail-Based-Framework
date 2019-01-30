@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 shsz = pd.read_csv('.\\data\\csi.csv', thousands=',')
 spx = pd.read_csv('.\\data\\spx.csv', thousands=',')
@@ -43,6 +44,7 @@ ptd_hsi = pd.DataFrame({'hsi': hsi.Price.values}, index = hsi.Date.values)
 dta = [ptd_shsz, ptd_spx, ptd_nky, ptd_ukx, ptd_asx, ptd_bov, ptd_cac, ptd_dax, ptd_hsi]
 ptd = pd.concat(dta, axis = 1, join = 'outer').iloc[1:, :]
 ptd = ptd.fillna(method = 'ffill')
-rtd = ptd.pct_change().iloc[1:, :]
+rtd = np.log(ptd) - np.log(ptd.shift(1))
+rtd = rtd.iloc[1:,]
 
 rtd.to_csv('.\\data\\rtd.csv')

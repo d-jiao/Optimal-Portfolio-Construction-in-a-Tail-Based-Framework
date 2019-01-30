@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-# from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import pandas as pd
 
@@ -28,26 +28,26 @@ for weight in weights:
                 or (cvar[-1] > 0.025 and cvar[-2] < 0.025):
             critical_weight.append(weight)
 
-lfig = plt.figure()
-plt.plot(weights, var)
-plt.plot(weights, cvar)
+lfig = plt.figure(figsize = (8, 5))
+plt.plot(weights, var, linewidth = 0.75)
+plt.plot(weights, cvar, linewidth = 0.75)
 plt.legend(['VaR', 'CVaR'])
 plt.xlabel('Weight of CSI 300')
 plt.ylabel('Left Tail Statistics')
 plt.axvspan(critical_weight[0], critical_weight[1], alpha = 0.2)
-plt.hlines(0.025, 0.0, 1.0, linestyle = 'dotted')
+plt.hlines(0.025, 0.0, 1.0, linestyle = 'dotted', linewidth = 0.75)
 lfig.savefig('.\\fig\\left_tail.png')
 
-rfig = plt.figure()
-plt.plot(weights, tr)
-plt.plot(weights, etr)
+rfig = plt.figure(figsize = (8, 5))
+plt.plot(weights, tr, linewidth = 0.75)
+plt.plot(weights, etr, linewidth = 0.75)
 plt.legend(['Tail Return', 'Expected Tail Return'])
 plt.xlabel('Weight of CSI 300')
 plt.ylabel('Right Tail Statistics')
 plt.axvspan(critical_weight[0], critical_weight[1], alpha = 0.2)
 level = max(etr[int(critical_weight[0] * 10000)], \
             etr[int(critical_weight[1] * 10000)])
-plt.hlines(level, 0.0, 1.0, linestyle = 'dotted')
+plt.hlines(level, 0.0, 1.0, linestyle = 'dotted', linewidth = 0.75)
 rfig.savefig('.\\fig\\right_tail.png')
 
 '''
