@@ -17,6 +17,16 @@ vol <- NULL
 
 for(i in 1 : length(indices)){
   dta <- data.frame(rtd[,i])
+  for(j in c(1, 5, 10)){
+    test_res <- Box.test(dta ^ 2, lag = j, type = 'Ljung')
+    print(indices[i])
+    print(j)
+    show(test_res)
+  }
+}
+
+for(i in 1 : length(indices)){
+  dta <- data.frame(rtd[,i])
   row.names(dta) <- time
   colnames(dta) <- indices[i]
   

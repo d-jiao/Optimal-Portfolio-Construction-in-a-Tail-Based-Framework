@@ -12,7 +12,7 @@ for i in range(len(indices)):
     mrl_di = pd.read_csv('.\\data\\' + indices[i] + '_mrl_di.csv', index_col = 0)
     tc = pd.read_csv('.\\data\\' + indices[i] + '_tc.csv', index_col = 0)
 
-    fig, ax = plt.subplots(2, 2, figsize = (10, 5))
+    fig, ax = plt.subplots(2, 2, figsize = (8, 4))
 
     ax[0][0].plot(mrl_di['a.x'], mrl_di['mrl'], color = '#1f77b4', linewidth = 0.75)
     ax[0][0].plot(mrl_di['a.x'], mrl_di['lower'], color = '#ff7f0e', linewidth = 0.75, linestyle = ':')
@@ -56,7 +56,7 @@ for i in range(len(indices)):
     mrl_di = pd.read_csv('.\\data\\' + indices[i] + '_mrl_di_left.csv', index_col = 0)
     tc = pd.read_csv('.\\data\\' + indices[i] + '_tc_left.csv', index_col = 0)
 
-    fig, ax = plt.subplots(2, 2, figsize = (10, 5))
+    fig, ax = plt.subplots(2, 2, figsize = (8, 4))
 
     ax[0][0].plot(-mrl_di['a.x'][::-1], mrl_di['mrl'][::-1], color = '#1f77b4', linewidth = 0.75)
     ax[0][0].plot(-mrl_di['a.x'][::-1], mrl_di['lower'][::-1], color = '#ff7f0e', linewidth = 0.75, linestyle = ':')
