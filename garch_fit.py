@@ -31,7 +31,7 @@ for i in range(2):
 plt.tight_layout()
 fig.savefig('.\\fig\\hist.png')
 
-fig, ax = plt.subplots(4, 1, sharex='col', figsize = (8, 4))
+fig, ax = plt.subplots(4, 1, sharex='col', figsize = (4, 5))
 for i in range(4):
     pacfs = pacf(rtd.iloc[:, i], 20)
     for j in range(21):
@@ -46,7 +46,7 @@ for i in range(4):
 plt.tight_layout()
 fig.savefig('.\\fig\\pacf.png')
 
-fig, ax = plt.subplots(4, 1, sharex='col', figsize = (8, 4))
+fig, ax = plt.subplots(4, 1, sharex='col', figsize = (4, 5))
 for i in range(4):
     pacfs = acf(rtd.iloc[:, i], 20)
     for j in range(21):

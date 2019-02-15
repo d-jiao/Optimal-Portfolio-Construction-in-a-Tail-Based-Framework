@@ -47,3 +47,6 @@ for(i in n : 2){
   indices_ <- indices_[-root]
   dta_ <- dta_[, -root]
 }
+
+mle_est <- CDVineMLE(dta[, Order], family = family, type = 1)
+mle_est <- CDVineMLE(dta[, Order], family = family, type = 1, start = mle_est$par, start2 = mle_est$par2)
