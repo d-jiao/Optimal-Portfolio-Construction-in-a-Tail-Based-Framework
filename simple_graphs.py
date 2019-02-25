@@ -28,17 +28,18 @@ for weight in weights:
                 or (cvar[-1] > 0.025 and cvar[-2] < 0.025):
             critical_weight.append(weight)
 
-lfig = plt.figure(figsize = (4, 5))
+lfig = plt.figure(figsize = (4, 3))
 plt.plot(weights, var, linewidth = 0.75)
 plt.plot(weights, cvar, linewidth = 0.75)
-plt.legend(['VaR', 'CVaR'])
+plt.legend(['Tail Loss', 'Expected Tail Loss'])
 plt.xlabel('Weight of CSI 300')
 plt.ylabel('Left Tail Statistics')
 plt.axvspan(critical_weight[0], critical_weight[1], alpha = 0.2)
 plt.hlines(0.025, 0.0, 1.0, linestyle = 'dotted', linewidth = 0.75)
+plt.tight_layout()
 lfig.savefig('.\\fig\\left_tail.png')
 
-rfig = plt.figure(figsize = (4, 5))
+rfig = plt.figure(figsize = (4, 3))
 plt.plot(weights, tr, linewidth = 0.75)
 plt.plot(weights, etr, linewidth = 0.75)
 plt.legend(['Tail Return', 'Expected Tail Return'])
@@ -48,6 +49,7 @@ plt.axvspan(critical_weight[0], critical_weight[1], alpha = 0.2)
 level = max(etr[int(critical_weight[0] * 10000)], \
             etr[int(critical_weight[1] * 10000)])
 plt.hlines(level, 0.0, 1.0, linestyle = 'dotted', linewidth = 0.75)
+plt.tight_layout()
 rfig.savefig('.\\fig\\right_tail.png')
 
 '''
@@ -86,7 +88,7 @@ cvar3surf = lax.plot_surface(X = x, Y = y, Z = cvar3)
 lax.set_xlabel('\n Weight of CSI 300', linespacing=1.5)
 lax.set_ylabel('\n Weight of S&P 500', linespacing=1.5)
 lax.set_zlabel('\n Left Tail Statistics', linespacing=3)
-lax.legend(['VaR', 'CVaR'])
+lax.legend(['Tail Loss', 'Expected Tail Loss'])
 lfig3.savefig('.\\fig\\left_tail3.png')
 
 rfig3 = plt.figure(figsize = (4, 4))

@@ -1,12 +1,19 @@
 library(rugarch)
+library(DistributionUtils)
+library(psych)
 
+indices <- c('csi', 'spx', 'nky', 'ukx', 'hsi', 'cac', 'dax', 'asx')
 rtd <- read.csv('.\\data\\rtd.csv')
 row.names(rtd) <- rtd[,1]
-rtd <- rtd[,c(2, 3, 4, 5)]
-
-indices <- c('csi', 'spx', 'nky', 'ukx')
+rtd <- rtd[,indices]
 
 summary(rtd)
+describe(rtd)
+for(i in 1 : length(indices)){
+  print(sd(rtd[,indices[i]]))
+  print(skewness(rtd[,indices[i]]))
+  print(kurtosis(rtd[,indices[i]]))
+}
 
 spec <- ugarchspec(variance.model = list(model = 'gjrGARCH', garchOrder = c(1, 1)), 
                    mean.model = list(armaOrder = c(0, 0)), distribution.model = "std")
@@ -26,7 +33,7 @@ for(i in 1 : length(indices)){
 }
 
 for(i in 1 : length(indices)){
-  dta <- data.frame(rtd[,i])
+  dta <- data.frame(rtd[,indices[i]])
   row.names(dta) <- time
   colnames(dta) <- indices[i]
   
@@ -49,7 +56,6 @@ for(i in 1 : length(indices)){
   }
   
   show(fit)
-  
 }
 
 write.csv(res, file = paste('.\\data\\res.csv', sep = ''))

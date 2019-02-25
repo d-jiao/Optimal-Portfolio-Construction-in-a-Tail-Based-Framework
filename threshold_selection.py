@@ -2,10 +2,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.stats import chi2
 
-# indices_front = ['CSI 300', 'S&P 500', 'Nikkei 225', 'FTSE 100']
-indices = ['csi', 'spx', 'nky', 'ukx']
-upper_threshold = [0.03, 0.025, 0.03, 0.02]
-lower_threshold = [-0.035, -0.025, -0.03, -0.02]
+indices = ['csi', 'spx', 'nky', 'ukx', 'hsi', 'cac', 'dax', 'asx']
+upper_threshold = [0.03, 0.025, 0.03, 0.02, 0.03, 0.025, 0.03, 0.02]
+lower_threshold = [-0.035, -0.025, -0.03, -0.02, -0.035, -0.025, -0.035, -0.02]
 
 # plt.rcParams['axes.prop_cycle'].by_key()['color']
 for i in range(len(indices)):

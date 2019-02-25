@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 import matlab.engine
 
 res = pd.read_csv('.\\data\\res.csv', index_col = 0)
-# indices_front = ['CSI 300', 'S&P 500', 'Nikkei 225', 'FTSE 100']
-indices = ['csi', 'spx', 'nky', 'ukx']
+indices = ['csi', 'spx', 'nky', 'ukx', 'hsi', 'cac', 'dax', 'asx']
 
 def pareto(q, loc = 0, scale = 1, shape = 0, lbda = 0):
     if q > loc:
@@ -27,10 +26,10 @@ eng = matlab.engine.start_matlab()
 params = pd.DataFrame()
 copula_data = pd.DataFrame()
 
-upper_quantile = [0.9758274, 0.9877278, 0.9873559, 0.9739680]
-lower_quantile = [0.02082559, 0.02008181, 0.02268501, 0.03161026]
-upper_threshold = [0.03, 0.025, 0.03, 0.02]
-lower_threshold = [-0.035, -0.025, -0.03, -0.02]
+upper_quantile = [0.9758274, 0.9877278, 0.9873559, 0.9739680, 0.9854965, 0.9747118, 0.9877278, 0.9817776]
+lower_quantile = [0.02082559, 0.02008181, 0.02268501, 0.03161026, 0.01599107, 0.01896616, 0.01041279, 0.02528821]
+upper_threshold = [0.03, 0.025, 0.03, 0.02, 0.03, 0.025, 0.03, 0.02]
+lower_threshold = [-0.035, -0.025, -0.03, -0.02, -0.035, -0.025, -0.035, -0.02]
 
 for i in range(len(indices)):
     dta = matlab.double(list(res[indices[i]]))
