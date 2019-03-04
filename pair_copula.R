@@ -1,9 +1,17 @@
+####################################################################
+
 library(CDVine)
+library(arrangements)
+
+####################################################################
 
 dta <- read.csv('.\\data\\copula_data.csv')
 row.names(dta) <- dta[,1]
 dta <- dta[,-1]
 indices <- c('csi', 'spx', 'nky', 'ukx', 'hsi', 'cac', 'dax', 'asx')
+family <- rep(2, length(dta) * (length(dta) - 1) / 2)
+
+####################################################################
 
 BiCopIndTest(dta$spx, dta$csi)$p.value
 BiCopIndTest(dta$spx, dta$nky)$p.value
@@ -13,9 +21,7 @@ BiCopIndTest(dta$spx, dta$cac)$p.value
 BiCopIndTest(dta$spx, dta$dax)$p.value
 BiCopIndTest(dta$spx, dta$asx)$p.value
 
-library(arrangements)
-
-family <- rep(2, length(dta) * (length(dta) - 1) / 2)
+####################################################################
 
 orders <- permutations(c(1, 3, 4, 5, 6, 7, 8))
 orders <- cbind(rep(2, 6), orders)
@@ -30,6 +36,8 @@ for(i in 1 : dim(orders)[1]){
     Order <- order
   }
 }
+
+####################################################################
 
 dta_ <- dta[, -2]
 n <- length(dta_)
@@ -56,5 +64,11 @@ for(i in n : 2){
 stru <- c('spx', stru, indices_)
 Order <- match(stru, indices)
 
+####################################################################
+
 mle_est <- CDVineMLE(dta[, Order], family = family, type = 1)
 mle_est <- CDVineMLE(dta[, Order], family = family, type = 1, start = mle_est$par, start2 = mle_est$par2)
+
+params <- data.frame(mle_est$par, mle_est$par2, family)
+colnames(params) <- c('corr', 'dof', 'family')
+write.csv(params, file = paste('.\\data\\cop_param.csv', sep = ''))

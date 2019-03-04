@@ -25,6 +25,7 @@ def pareto(q, loc = 0, scale = 1, shape = 0, lbda = 0):
 eng = matlab.engine.start_matlab()
 params = pd.DataFrame()
 copula_data = pd.DataFrame()
+fitted_tparams = pd.DataFrame()
 
 upper_quantile = [0.9758274, 0.9877278, 0.9873559, 0.9739680, 0.9854965, 0.9747118, 0.9877278, 0.9817776]
 lower_quantile = [0.02082559, 0.02008181, 0.02268501, 0.03161026, 0.01599107, 0.01896616, 0.01041279, 0.02528821]
@@ -84,8 +85,12 @@ for i in range(len(indices)):
     lower = eng.eval('pdist.LowerParameters;')
     lshape = lower[0][0]
     lscale = lower[0][1]
+    mu = eng.eval('tdist.mu')
+    sigma = eng.eval('tdist.sigma')
+    nu = eng.eval('tdist.nu')
 
-    params[indices[i]] = [ushape, uscale, lshape, lscale]
+    params[indices[i]] = [ushape, uscale, upper_threshold[i], lshape, lscale, lower_threshold[i]]
+    fitted_tparams[indices[i]] = [mu, sigma, nu]
 
     y = []
     py = eng.eval('cdf(pdist, dta);')
@@ -97,7 +102,10 @@ for i in range(len(indices)):
             y.append(ty[0][j])
     copula_data[indices[i]] = y
 
+params.index = ['ushape', 'uscale', 'uloc', 'lshape', 'lscale', 'lloc']
 copula_data.index = res.index
+fitted_tparams.index = ['mu', 'sigma', 'nu']
 
 params.to_csv('.\\data\\pareto.csv')
 copula_data.to_csv('.\\data\\copula_data.csv')
+fitted_tparams.to_csv('.\\data\\fitted_tparams.csv')

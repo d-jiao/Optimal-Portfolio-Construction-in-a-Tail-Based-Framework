@@ -1,14 +1,23 @@
+####################################################################
+
 library(POT)
+
+####################################################################
 
 res <- read.csv('.\\data\\res.csv')
 row.names(res) <- res[,1]
 res <- res[,-1]
 
 indices <- c('csi', 'spx', 'nky', 'ukx', 'hsi', 'cac', 'dax', 'asx')
+time <- as.numeric(as.Date(row.names(res)))
+
+####################################################################
 
 summary(res)
 
-time <- as.numeric(as.Date(row.names(res)))
+####################################################################
+# right tail
+
 for(i in 1 : length(indices)){
   obs <- res[, i]
   dta <- data.frame(time, obs)
@@ -24,6 +33,9 @@ for(i in 1 : length(indices)){
   write.csv(tc, file = paste('.\\data\\', indices[i], '_tc.csv', sep = ''))
 }
 
+####################################################################
+# left tail
+
 for(i in 1 : length(indices)){
   obs <- -res[, i]
   dta <- data.frame(time, obs)
@@ -38,6 +50,8 @@ for(i in 1 : length(indices)){
   tc <- data.frame(c$scales, c$shapes)
   write.csv(tc, file = paste('.\\data\\', indices[i], '_tc_left.csv', sep = ''))
 }
+
+####################################################################
 
 upper_threshold <- c(0.03, 0.025, 0.03, 0.02, 0.03, 0.025, 0.03, 0.02)
 ur <- c()
