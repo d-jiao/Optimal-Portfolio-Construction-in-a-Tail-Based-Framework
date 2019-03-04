@@ -1,26 +1,28 @@
+####################################################################
+
 library(rugarch)
 library(DistributionUtils)
 library(psych)
+
+####################################################################
 
 indices <- c('csi', 'spx', 'nky', 'ukx', 'hsi', 'cac', 'dax', 'asx')
 rtd <- read.csv('.\\data\\rtd.csv')
 row.names(rtd) <- rtd[,1]
 rtd <- rtd[,indices]
 
+####################################################################
+
 summary(rtd)
 describe(rtd)
+
 for(i in 1 : length(indices)){
   print(sd(rtd[,indices[i]]))
   print(skewness(rtd[,indices[i]]))
   print(kurtosis(rtd[,indices[i]]))
 }
 
-spec <- ugarchspec(variance.model = list(model = 'gjrGARCH', garchOrder = c(1, 1)), 
-                   mean.model = list(armaOrder = c(0, 0)), distribution.model = "std")
-
-time <- as.Date(row.names(rtd))
-res <- NULL
-vol <- NULL
+####################################################################
 
 for(i in 1 : length(indices)){
   dta <- data.frame(rtd[,i])
@@ -31,6 +33,15 @@ for(i in 1 : length(indices)){
     show(test_res)
   }
 }
+
+####################################################################
+
+spec <- ugarchspec(variance.model = list(model = 'gjrGARCH', garchOrder = c(1, 1)), 
+                   mean.model = list(armaOrder = c(0, 0)), distribution.model = "std")
+
+time <- as.Date(row.names(rtd))
+res <- NULL
+vol <- NULL
 
 for(i in 1 : length(indices)){
   dta <- data.frame(rtd[,indices[i]])

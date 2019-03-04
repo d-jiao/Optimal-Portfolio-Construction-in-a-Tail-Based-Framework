@@ -2,7 +2,7 @@ import cvxpy as cvx
 import pandas as pd
 import numpy as np
 
-def tail_opt_ip(r, a, b, g, m):
+def tail_opt(r, a, b, g, m):
     '''
     :param r: data of return to day
     :param a: confidence level of left tail
@@ -27,22 +27,30 @@ def tail_opt_ip(r, a, b, g, m):
 
     # objective function
     obj = cvx.Maximize(cvx.sum(cvx.multiply(X, r)) / np.ceil((1 - b) * n))
+
     # constraints
     cons = []
-    # position constraint
-    cons += [x == x_p - x_m]
-    cons += [sum(x) == 1]
-    # leverage constraint
-    cons += [m * sum(x_m) <= sum(x_p)]
-    cons += [x_m >= 0, x_p >= 0]
-    # objective reformulation and left tail constraint
+
+    # objective constraints
     cons += [sum(y) == np.ceil((1 - b) * n)]
-    cons += [ksai + 1 / (np.ceil(1 - a) * n) * sum(z) <= g]
     for i in range(n):
         cons += [X[i][:] <= M * y[i], X[i][:] >= -M * y[i]]
-        cons += [z[i] >= sum(-r[i][:] * x) - ksai]
         cons += [X[i][:] - x <= 2 * M * (1 - y[i])]
         cons += [X[i][:] - x >= -2 * M * (1 - y[i])]
+
+    # position constraint
+    cons += [cvx.sum(x) == 1]
+
+    # leverage constraint
+    cons += [m * cvx.sum(x_m) <= cvx.sum(x_p)]
+    cons += [x == x_p - x_m]
+    cons += [x_m >= 0, x_m >= -x]
+    cons += [x_p >= 0, x_p >= x]
+
+    # left tail constraint
+    cons += [ksai + 1 / np.ceil(a * n) * cvx.sum(z) <= g]
+    cons += [z >= 0]
+    cons += [z >= -r * x - ksai]
 
     prob = cvx.Problem(obj, cons)
     prob.solve(solver = cvx.GUROBI)
@@ -53,10 +61,12 @@ def tail_opt_ip(r, a, b, g, m):
 
 if __name__ == '__main__':
     a = 0.05
-    b = 0.05
-    g = 0.0001
-    m = 2.5
-    rtd = pd.read_csv('rtd.csv', index_col=0)
-    r = np.array(rtd.iloc[-60:, :])
-    v, w = tail_opt_ip(r, a, b, g, m)
+    b = 0.95
+    g = 0.02
+    m = 3
+    r = pd.read_csv('.\\data\\rtd.csv', index_col=0)
+    indices = ['csi', 'spx', 'nky', 'ukx', 'hsi', 'cac', 'dax', 'asx']
+    r = r[indices]
+    r = np.array(r.iloc[-30 :, :])
+    v, w = tail_opt(r, a, b, g, m)
     print(v, w)
