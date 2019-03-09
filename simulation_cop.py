@@ -1,7 +1,9 @@
+import sys
 import numpy as np
 import pandas as pd
 from scipy.stats import genpareto
 from scipy.stats import t
+from utils import *
 
 def ppf_evt(x, ul, ur, tparams, gpdparams):
     '''
@@ -21,13 +23,13 @@ def ppf_evt(x, ul, ur, tparams, gpdparams):
 
 def h(u1, u2, rho, df):
     if u1 == 1:
-        u1 -= 1e-16
+        u1 -= sys.float_info.epsilon
     if u1 == 0:
-        u1 += 1e-16
+        u1 += sys.float_info.epsilon
     if u2 == 1:
-        u2 -= 1e-16
+        u2 -= sys.float_info.epsilon
     if u2 == 0:
-        u2 += 1e-16
+        u2 += sys.float_info.epsilon
     u1_ = t.ppf(u1, df + 1)
     u2_ = t.ppf(u2, df)
     a = (df + u2_ ** 2) * (1 - rho ** 2) / (df + 1)
@@ -59,15 +61,21 @@ if __name__ == '__main__':
 
     tparams = pd.read_csv('.\\data\\fitted_tparams.csv', index_col = 0)
     gpdparams = pd.read_csv('.\\data\\pareto.csv', index_col = 0)
+    # garchparams = pd.read_csv('.\\data\\garch_param.csv', index_col=0, header=None)
+    r = pd.read_csv('.\\data\\rtd.csv', index_col=0)
+    copparams = pd.read_csv('.\\data\\cop_param.csv', index_col = 0)
 
     n = 2700
     d = 8
+    # c = np.array(garchparams.iloc[0, :])
+    r.index = pd.to_datetime(r.index)
+    month_ends = month_ends(r.index)
+    r0 = r.r0[month_ends[12 * 9 - 1] + 1:].mean()
+
     ppfs = []
     for j in range(d):
-        ppf = lambda x: ppf_evt(x, ul[j], ur[j], tparams[indices[j]], gpdparams[indices[0]])
+        ppf = lambda x: ppf_evt(x, ul[j], ur[j], tparams[indices[j]], gpdparams[indices[j]])
         ppfs.append(ppf)
-
-    copparams = pd.read_csv('.\\data\\cop_param.csv', index_col = 0)
 
     rhos = np.zeros((d, d))
     rhos[np.triu_indices(d, 1)] = copparams['corr']
@@ -75,8 +83,9 @@ if __name__ == '__main__':
     dfs = np.zeros((d, d))
     dfs[np.triu_indices(d, 1)] = copparams['dof']
 
-    for k in range(5):
-        sample = sim(d, n, ppfs, rhos, dfs)
+    for k in range(1):
+        sample = sim(d, n, ppfs, rhos, dfs) #+ c
         sample = pd.DataFrame(sample)
         sample.columns = indices
-        sample.to_csv('.\\data\\simulated_' + str(k + 1) + '.csv', index_label = False )
+        sample['r0'] = np.ones(n) * r0
+        sample.to_csv('.\\data\\simulated' + str(k + 1) + '.csv')

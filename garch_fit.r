@@ -3,6 +3,7 @@
 library(rugarch)
 library(DistributionUtils)
 library(psych)
+library(fUnitRoots)
 
 ####################################################################
 
@@ -20,6 +21,13 @@ for(i in 1 : length(indices)){
   print(sd(rtd[,indices[i]]))
   print(skewness(rtd[,indices[i]]))
   print(kurtosis(rtd[,indices[i]]))
+}
+
+####################################################################
+
+for(i in 1 : length(indices)){
+  test <- adfTest(res[,i])
+  print(test)
 }
 
 ####################################################################
